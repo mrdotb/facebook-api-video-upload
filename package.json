@@ -1,0 +1,27 @@
+{
+  "name": "facebook-api-video-upload",
+  "version": "0.0.0",
+  "description": "A handy function to upload video in chunk on the facebook grap.",
+  "license": "MIT",
+  "author": "mrdotb",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MRdotB/facebook-api-video-upload.git"
+  },
+  "keywords": [
+    "facebook-api",
+    "facebook",
+    "graph",
+    "api",
+    "upload",
+    "video"
+  ],
+  "bugs": {
+    "url": "https://github.com/MRdotB/facebook-api-video-upload/issues"
+  },
+  "homepage": "https://github.com/MRdotB/facebook-api-video-upload#readme"
+}
