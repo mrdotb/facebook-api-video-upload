@@ -26,6 +26,8 @@
   "homepage": "https://github.com/MRdotB/facebook-api-video-upload#readme",
   "dependencies": {
     "bluebird": "^3.4.0",
+    "file-type": "^3.8.0",
+    "read-chunk": "^2.0.0",
     "request-promise": "^3.0.0"
   }
 }
