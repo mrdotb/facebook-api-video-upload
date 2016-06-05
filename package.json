@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/MRdotB/facebook-api-video-upload/issues"
   },
-  "homepage": "https://github.com/MRdotB/facebook-api-video-upload#readme"
+  "homepage": "https://github.com/MRdotB/facebook-api-video-upload#readme",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "request-promise": "^3.0.0"
+  }
 }
