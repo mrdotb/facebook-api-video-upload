@@ -1,0 +1,6 @@
+{
+	"missing": "Missing parameter args.",
+	"type": "Expected args to be an object. typeof args ===",
+	"missingId": "Missing id key in args object. The id represent {page_id || user_id || event_id || group_id} from facebook and is mandatory for the request.",
+	"missingToken": "Missing token key in args object. The facebook token is mandatory for the request."
+}
