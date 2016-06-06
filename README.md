@@ -6,8 +6,8 @@ This module handle the video upload chunk for facebook api.
 [fb video upload](https://developers.facebook.com/docs/graph-api/video-uploads)
 
 ##Prerequisite
-Unix split cmd
-Node 6.2
+- Unix split cmd
+- Node 6.2
 
 ##How to use ?
 ```javascript
