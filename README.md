@@ -1,15 +1,15 @@
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 
-#facebook-api-video-upload
+# facebook-api-video-upload
+> Upload a video in chunk on the facebook api. [more info](https://developers.facebook.com/docs/graph-api/video-uploads)
 
-This module handle the video upload chunk for facebook api.
-[fb video upload](https://developers.facebook.com/docs/graph-api/video-uploads)
+## Install
+```
+$ npm i facebook-api-video-upload --save
+```
+Tested on OS X and Linux.
 
-##Prerequisite
-- Unix split cmd
-- Node 6.2
-
-##How to use ?
+## Usage
 ```javascript
 const fbUpload = require('facebook-api-video-upload');
 
@@ -29,4 +29,6 @@ fbUpload(args).then((data) => {
 }).catch((e) => {
 	console.error(e);
 });
-```
+
+## License
+MIT © [MrdotB](https://github.com/MRdotB)
