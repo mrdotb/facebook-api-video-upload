@@ -1,6 +1,5 @@
-tests
-handle upload errors
-refactor chain upload ?
-README doc
-Publish on npm
-Profit !
+- Add tests real pain
+- handle upload errors / retry
+- refactor chain upload with bluebird methods
+- Publish on npm
+- Profit !
