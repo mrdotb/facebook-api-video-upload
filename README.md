@@ -29,6 +29,7 @@ fbUpload(args).then((data) => {
 }).catch((e) => {
 	console.error(e);
 });
+```
 
 ## License
 MIT © [MrdotB](https://github.com/MRdotB)
