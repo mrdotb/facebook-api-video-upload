@@ -1,5 +1,3 @@
-- Add tests real pain
+- Add tests
 - handle upload errors / retry
 - refactor chain upload with bluebird methods
-- Publish on npm
-- Profit !
