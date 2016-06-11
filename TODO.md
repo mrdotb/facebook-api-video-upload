@@ -1,3 +1,2 @@
 - Add tests
 - handle upload errors / retry
-- refactor chain upload with bluebird methods
