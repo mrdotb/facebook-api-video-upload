@@ -11,20 +11,17 @@ Tested on OS X and Linux.
 
 ## Usage
 ```javascript
+const fs = require('fs');
 const fbUpload = require('facebook-api-video-upload');
 
 const args = {
 	token: yourtoken, // with the permission to upload
 	id: yourid, //The id represent {page_id || user_id || event_id || group_id}
-	videoPath: videoPath //path to the video
+	stream: fs.createReadStream('./test/fixture/fixture.mp4') //path to the video
 };
 
-fbUpload(args).then((data) => {
-	console.log(data);
-	//	{ videoName: 'fixture.mp4',
-	//	  type: { ext: 'mp4', mime: 'video/mp4' },
-	//	  video_id: '1752436138346810',
-	//	  upload_session_id: '1752436151680142',
+fbUpload(args).then((res) => {
+	console.log('res: ', res);
 	//	  res: { success: true } }
 }).catch((e) => {
 	console.error(e);
