@@ -21,7 +21,7 @@ function apiInit(args, videoSize) {
 	return rp(options);
 }
 
-function apiFinish(args, id) {
+function apiFinish(args, id, video_id) {
 	const options = {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
@@ -33,7 +33,7 @@ function apiFinish(args, id) {
 		json: true
 	};
 
-	return rp(options).then(res => ({ ...res, id }));
+	return rp(options).then(res => ({ ...res, id: video_id }));
 }
 
 function uploadChunk(args, id, start, chunk) {
@@ -61,11 +61,14 @@ function uploadChunk(args, id, start, chunk) {
 
 function uploadChain(buffer, args, id, res) {
 	if (res.start_offset === res.end_offset) {
-		return id;
+		return {
+      			id,
+      			video_id: res.video_id,
+    		};
 	}
 	var chunk = buffer.slice(res.start_offset, res.end_offset);
 	return uploadChunk(args, id, res.start_offset, chunk)
-	.then((res) => uploadChain(buffer, args, id, res));
+	.then(resp => uploadChain(buffer, args, id, { ...resp, video_id: res.video_id }));
 }
 
 function facebookApiVideoUpload(args) {
@@ -73,7 +76,7 @@ function facebookApiVideoUpload(args) {
 		.then((buffer) => buffer)
 		.then((buffer) => [buffer, apiInit(args, buffer.length)])
 		.spread((buffer, res) => uploadChain(buffer, args, res.upload_session_id, res))
-		.then((id) => apiFinish(args, id));
+		.then((res) => apiFinish(args, res.id, res.video_id));
 }
 
 module.exports = facebookApiVideoUpload;
