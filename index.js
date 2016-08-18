@@ -65,7 +65,7 @@ function uploadChain(buffer, args, id, res) {
 	}
 	var chunk = buffer.slice(res.start_offset, res.end_offset);
 	return uploadChunk(args, id, res.start_offset, chunk)
-	.then((res) => uploadChain(buffer, args, id, res));
+	return rp(options).then(res => ({ ...res, id }));
 }
 
 function facebookApiVideoUpload(args) {
