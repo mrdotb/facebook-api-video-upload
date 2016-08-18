@@ -33,7 +33,7 @@ function apiFinish(args, id) {
 		json: true
 	};
 
-	return rp(options);
+	return rp(options).then(res => ({ ...res, id }));
 }
 
 function uploadChunk(args, id, start, chunk) {
