@@ -21,7 +21,7 @@ function apiInit(args, videoSize) {
 	return rp(options);
 }
 
-function apiFinish(args, id) {
+function apiFinish(args, id, video_id) {
 	const options = {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
