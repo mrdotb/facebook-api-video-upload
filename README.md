@@ -22,7 +22,7 @@ const args = {
 
 fbUpload(args).then((res) => {
 	console.log('res: ', res);
-	//	  res: { success: true } }
+	//	  res: { success: true, id: video_id } }
 }).catch((e) => {
 	console.error(e);
 });
