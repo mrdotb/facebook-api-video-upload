@@ -1,10 +1,8 @@
 'use strict';
-// Dependencies
 const Promise = require('bluebird');
 const streamToPromise = require('stream-to-promise');
 const rp = require('request-promise');
 
-// Define
 const url = 'https://graph-video.facebook.com';
 
 function apiInit(args, videoSize) {
@@ -21,7 +19,7 @@ function apiInit(args, videoSize) {
 	return rp(options);
 }
 
-function apiFinish(args, id) {
+function apiFinish(args, id, video_id) {
 	const options = {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
@@ -33,7 +31,11 @@ function apiFinish(args, id) {
 		json: true
 	};
 
-	return rp(options);
+	return rp(options)
+		.then(res => {
+			res.video_id = video_id;
+			return res;
+		});
 }
 
 function uploadChunk(args, id, start, chunk) {
@@ -59,22 +61,25 @@ function uploadChunk(args, id, start, chunk) {
 	return rp(options);
 }
 
-function uploadChain(buffer, args, id, res) {
+function uploadChain(buffer, args, res, ids) {
+	console.log(ids);
 	if (res.start_offset === res.end_offset) {
-		return id;
+		return ids;
 	}
 	var chunk = buffer.slice(res.start_offset, res.end_offset);
-	return uploadChunk(args, id, res.start_offset, chunk)
-	.then((res) => uploadChain(buffer, args, id, res));
+	return uploadChunk(args, ids[0], res.start_offset, chunk)
+	.then(res => uploadChain(buffer, args, res, ids));
 }
 
 function facebookApiVideoUpload(args) {
 	return Promise.resolve(streamToPromise(args.stream))
-		.then((buffer) => buffer)
-		.then((buffer) => [buffer, apiInit(args, buffer.length)])
-		.spread((buffer, res) => uploadChain(buffer, args, res.upload_session_id, res))
-		.then((id) => apiFinish(args, id));
+		.then(buffer => buffer)
+		.then(buffer => [buffer, apiInit(args, buffer.length)])
+		.spread((buffer, res) => {
+			const ids = [res.upload_session_id, res.video_id];
+			return uploadChain(buffer, args, res, ids);
+		})
+		.spread((id, video_id) => apiFinish(args, id, video_id));
 }
 
 module.exports = facebookApiVideoUpload;
-
