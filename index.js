@@ -33,7 +33,7 @@ function apiFinish(args, id, video_id) {
 		json: true
 	};
 
-	return rp(options).then(res => ({ ...res, id: video_id }));
+	return rp(options).then(res => ({res, id: video_id }));
 }
 
 function uploadChunk(args, id, start, chunk) {
@@ -68,7 +68,7 @@ function uploadChain(buffer, args, id, res) {
 	}
 	var chunk = buffer.slice(res.start_offset, res.end_offset);
 	return uploadChunk(args, id, res.start_offset, chunk)
-	.then(resp => uploadChain(buffer, args, id, { ...resp, video_id: res.video_id }));
+	.then(resp => uploadChain(buffer, args, id, {resp: resp, video_id: res.video_id }));
 }
 
 function facebookApiVideoUpload(args) {
