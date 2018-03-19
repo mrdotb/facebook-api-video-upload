@@ -16,8 +16,8 @@ function apiInit(args, videoSize) {
 		}
 	};
 
-    if(process.env.debug != undefined)
-        console.log('video size in bytes ', videoSize);
+	if(process.env.debug != undefined)
+        	console.log('video size in bytes ', videoSize);
 	return rp(options)
 		.then(res => {
 			return res;
@@ -72,8 +72,8 @@ function uploadChunk(args, id, start, chunk) {
 			return res;
 		})
 		.catch(err => {
-            if(process.env.debug != undefined)
-			    console.log('error, reupload start_offset ', formData.start_offset);
+			if(process.env.debug != undefined)
+				console.log('error, reupload start_offset ', formData.start_offset);
 			return uploadChunk(args, id, start, chunk); 
 		});
 }
