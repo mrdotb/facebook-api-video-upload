@@ -16,7 +16,12 @@ function apiInit(args, videoSize) {
 		}
 	};
 
-	return rp(options);
+    if(process.env.debug != undefined)
+        console.log('video size in bytes ', videoSize);
+	return rp(options)
+		.then(res => {
+			return res;
+		});
 }
 
 function apiFinish(args, id, video_id) {
@@ -59,10 +64,18 @@ function uploadChunk(args, id, start, chunk) {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
 		formData: formData,
-		json: true
+		json: true,
 	};
 
-	return rp(options);
+	return rp(options)
+		.then(res => {
+			return res;
+		})
+		.catch(err => {
+            if(process.env.debug != undefined)
+			    console.log('error, reupload start_offset ', formData.start_offset);
+			return uploadChunk(args, id, start, chunk); 
+		});
 }
 
 function uploadChain(buffer, args, res, ids) {
