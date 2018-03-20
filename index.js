@@ -4,8 +4,8 @@ const streamToPromise = require('stream-to-promise');
 const rp = require('request-promise');
 
 const url = 'https://graph-video.facebook.com';
-const retry = 0;
-const RETRY_MAX = 10;
+const retryMax = 10;
+let retry = 0;
 
 function apiInit(args, videoSize) {
 	const options = {
@@ -18,8 +18,6 @@ function apiInit(args, videoSize) {
 		}
 	};
 
-	if(process.env.debug != undefined)
-        	console.log('video size in bytes ', videoSize);
 	return rp(options)
 		.then(res => {
 			return res;
@@ -27,8 +25,8 @@ function apiInit(args, videoSize) {
 }
 
 function apiFinish(args, id, video_id) {
-	const videoTitle = args.title || ''
-	const description = args.description || ''
+	const videoTitle = args.title || '';
+	const description = args.description || '';
 	const options = {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
@@ -66,24 +64,19 @@ function uploadChunk(args, id, start, chunk) {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
 		formData: formData,
-		json: true,
+		json: true
 	};
 
 	return rp(options)
 		.then(res => {
-            retry = 0; // reset retry
+			retry = 0;
 			return res;
 		})
 		.catch(err => {
-            retry ++;
-            if(retry >= RETRY_MAX) {
-                console.log(`Can not upload file`);
-                process.exit();
-            }
-
-			if(process.env.debug != undefined)
-				console.log('error, reupload start_offset ', formData.start_offset);
-			return uploadChunk(args, id, start, chunk); 
+			if (retry++ >= retryMax) {
+				return err;
+			}
+			return uploadChunk(args, id, start, chunk);
 		});
 }
 
@@ -91,9 +84,10 @@ function uploadChain(buffer, args, res, ids) {
 	if (res.start_offset === res.end_offset) {
 		return ids;
 	}
+
 	var chunk = buffer.slice(res.start_offset, res.end_offset);
 	return uploadChunk(args, ids[0], res.start_offset, chunk)
-	.then(res => uploadChain(buffer, args, res, ids));
+		.then(res => uploadChain(buffer, args, res, ids));
 }
 
 function facebookApiVideoUpload(args) {
