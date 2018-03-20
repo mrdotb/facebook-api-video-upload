@@ -1,2 +1,1 @@
 - Add tests
-- handle upload errors / retry
