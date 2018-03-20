@@ -4,6 +4,8 @@ const streamToPromise = require('stream-to-promise');
 const rp = require('request-promise');
 
 const url = 'https://graph-video.facebook.com';
+const retry = 0;
+const RETRY_MAX = 10;
 
 function apiInit(args, videoSize) {
 	const options = {
@@ -16,7 +18,12 @@ function apiInit(args, videoSize) {
 		}
 	};
 
-	return rp(options);
+	if(process.env.debug != undefined)
+        	console.log('video size in bytes ', videoSize);
+	return rp(options)
+		.then(res => {
+			return res;
+		});
 }
 
 function apiFinish(args, id, video_id) {
@@ -59,10 +66,25 @@ function uploadChunk(args, id, start, chunk) {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
 		formData: formData,
-		json: true
+		json: true,
 	};
 
-	return rp(options);
+	return rp(options)
+		.then(res => {
+            retry = 0; // reset retry
+			return res;
+		})
+		.catch(err => {
+            retry ++;
+            if(retry >= RETRY_MAX) {
+                console.log(`Can not upload file`);
+                process.exit();
+            }
+
+			if(process.env.debug != undefined)
+				console.log('error, reupload start_offset ', formData.start_offset);
+			return uploadChunk(args, id, start, chunk); 
+		});
 }
 
 function uploadChain(buffer, args, res, ids) {
