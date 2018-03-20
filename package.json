@@ -1,6 +1,6 @@
 {
   "name": "facebook-api-video-upload",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "A handy function to upload video in chunk on the facebook graph.",
   "license": "MIT",
   "author": "mrdotb",
