@@ -31,10 +31,13 @@ function apiFinish(args, id, video_id) {
     upload_session_id: id,
     title: args.title || '',
     description: args.description || '',
-    published: !args.draft,
+    published: true,
   }
 
-  if (args.draft) { formParams.unpublished_content_type = 'DRAFT' };
+  if (args.draft === 'true') {
+    formParams.unpublished_content_type = 'DRAFT';
+    formParams.published = false;
+  };
 
 	const options = {
 		method: 'POST',
