@@ -25,18 +25,24 @@ function apiInit(args, videoSize) {
 }
 
 function apiFinish(args, id, video_id) {
-	const videoTitle = args.title || '';
-	const description = args.description || '';
+  const formParams = {
+    access_token: args.token,
+    upload_phase: 'finish',
+    upload_session_id: id,
+    title: args.title || '',
+    description: args.description || '',
+    published: true,
+  }
+
+  if (args.draft === 'true') {
+    formParams.unpublished_content_type = 'DRAFT';
+    formParams.published = false;
+  };
+
 	const options = {
 		method: 'POST',
 		uri: `${url}/v2.6/${args.id}/videos`,
-		form: {
-			access_token: args.token,
-			upload_phase: 'finish',
-			upload_session_id: id,
-			title: videoTitle,
-			description: description
-		},
+		form: formParams,
 		json: true
 	};
 
