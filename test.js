@@ -1,20 +1,9 @@
-# facebook-api-video-upload
-> Upload a video in chunk on the facebook api. [more info](https://developers.facebook.com/docs/graph-api/video-uploads)
-
-## Install
-```
-$ npm i facebook-api-video-upload --save
-```
-Tested on OS X and Linux.
-
-## Usage
-```javascript
 const fs = require('fs');
 const fbUpload = require('./');
 
 const args = {
-  token: "YOURTOKEN", // with the permission to upload
-  id: "YOURID", //The id represent {page_id || user_id || event_id || group_id}
+  token: "", // with the permission to upload
+  id: "", //The id represent {page_id || user_id || event_id || group_id}
   stream: fs.createReadStream('./fixture.mp4'), //path to the video,
   title: "my video",
   description: "my description",
@@ -35,7 +24,4 @@ fbUpload(args).then((res) => {
   //res:  { success: true, video_id: '1838312909759132' }
 }).catch((e) => {
   console.error(e);
-});```
-
-## License
-MIT © [MrdotB](https://github.com/MRdotB)
+});
