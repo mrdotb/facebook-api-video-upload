@@ -10,7 +10,7 @@ Tested on OS X and Linux.
 ## Usage
 ```javascript
 const fs = require('fs');
-const fbUpload = require('./');
+const fbUpload = require('facebook-api-video-upload');
 
 const args = {
   token: "YOURTOKEN", // with the permission to upload
