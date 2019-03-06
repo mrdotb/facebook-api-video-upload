@@ -6,6 +6,7 @@
   "author": "mrdotb",
   "main": "index.js",
   "scripts": {
+    "fixture": "youtube-dl https://www.youtube.com/watch?v=NrB35qqOyhU -o 'fixture.%(ext)s' --format mp4 --write-thumbnail",
     "test": ""
   },
   "repository": {
