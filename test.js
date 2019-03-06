@@ -1,6 +1,8 @@
 const fs = require('fs');
 const fbUpload = require('./');
 
+// You can download some fixture using npm run fixture cmd
+
 const args = {
   token: "", // with the permission to upload
   id: "", //The id represent {page_id || user_id || event_id || group_id}
