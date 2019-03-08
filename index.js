@@ -1,6 +1,5 @@
 const streamToPromise = require('stream-to-promise')
 const rp = require('request-promise')
-const fs = require('fs')
 
 const url = 'https://graph-video.facebook.com'
 const version = 'v3.2'
