@@ -2,7 +2,7 @@ const streamToPromise = require('stream-to-promise')
 const rp = require('request-promise')
 
 const url = 'https://graph-video.facebook.com'
-const version = 'v3.2'
+const version = 'v9.0'
 
 const retryMax = 10
 let retry = 0
@@ -10,7 +10,7 @@ let retry = 0
 function apiInit(args, videoSize) {
   const options = {
     method: 'POST',
-    uri: `${url}/${version}/${args.id}/videos?access_token=${args.token}`,
+    uri: `${url}/${version}/${args.id}/advideos?access_token=${args.token}`,
     json: true,
     form: {
       upload_phase: 'start',
@@ -27,7 +27,7 @@ function apiFinish(args, upload_session_id, video_id) {
   const options = {
     method: 'POST',
     json: true,
-    uri: `${url}/${version}/${args.id}/videos`,
+    uri: `${url}/${version}/${args.id}/advideos`,
     formData: {
       ...extraParams,
       upload_session_id,
@@ -55,7 +55,7 @@ function uploadChunk(args, id, start, chunk) {
   }
   const options = {
     method: 'POST',
-    uri: `${url}/${version}/${args.id}/videos`,
+    uri: `${url}/${version}/${args.id}/advideos`,
     formData: formData,
     json: true
   }
