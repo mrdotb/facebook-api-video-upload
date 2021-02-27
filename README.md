@@ -37,5 +37,8 @@ fbUpload(args).then((res) => {
   console.error(e);
 });```
 
+## Note
+This script doesn't support uploading videos on user's profile. This has been restricted from facebook's side. 
+
 ## License
 MIT © [MrdotB](https://github.com/MRdotB)
