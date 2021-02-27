@@ -5,7 +5,7 @@ const fbUpload = require('./');
 
 const args = {
   token: "", // with the permission to upload
-  id: "", //The id represent {page_id || user_id || event_id || group_id}
+  id: "", //The id represent {page_id || event_id || group_id}
   stream: fs.createReadStream('./fixture.mp4'), //path to the video,
   title: "my video",
   description: "my description",
