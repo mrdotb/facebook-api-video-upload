@@ -2,12 +2,12 @@ const streamToPromise = require('stream-to-promise')
 const rp = require('request-promise')
 
 const url = 'https://graph-video.facebook.com'
-const version = 'v3.2'
+const version = 'v9.0'
 
 const retryMax = 10
 let retry = 0
 
-function apiInit(args, videoSize) {
+const apiInit = async (args, videoSize) => {
   const options = {
     method: 'POST',
     uri: `${url}/${version}/${args.id}/videos?access_token=${args.token}`,
@@ -18,11 +18,11 @@ function apiInit(args, videoSize) {
     }
   }
 
-  return rp(options).then(res => res)
+  return await rp(options)
 }
 
-function apiFinish(args, upload_session_id, video_id) {
-  const {token, id, stream, ...extraParams} = args
+const apiFinish = async (args, upload_session_id, video_id) => {
+  const { token, id, stream, ...extraParams } = args
 
   const options = {
     method: 'POST',
@@ -32,15 +32,14 @@ function apiFinish(args, upload_session_id, video_id) {
       ...extraParams,
       upload_session_id,
       access_token: args.token,
-      upload_phase: 'finish',
+      upload_phase: 'finish'
     }
   }
-
-  return rp(options)
-    .then(res => ({...res, video_id}))
+  const res = await rp(options)
+  return { ...res, video_id }
 }
 
-function uploadChunk(args, id, start, chunk) {
+const uploadChunk = async (args, id, start, chunk) => {
   const formData = {
     access_token: args.token,
     upload_phase: 'transfer',
@@ -60,34 +59,33 @@ function uploadChunk(args, id, start, chunk) {
     json: true
   }
 
-  return rp(options)
-    .then(res => {
-      retry = 0
-      return res
-    })
-    .catch(err => {
-      if (retry++ >= retryMax) {
-        return err
-      }
-      return uploadChunk(args, id, start, chunk)
-    })
+  try {
+    const res = await rp(options)
+    retry = 0
+    return res
+  } catch (err) {
+    return retry++ >= retryMax ? err : uploadChunk(args, id, start, chunk)
+  }
 }
 
-function uploadChain(buffer, args, res, ids) {
+const uploadChain = async (buffer, args, res, ids) => {
   if (res.start_offset === res.end_offset) {
     return ids
   }
 
   var chunk = buffer.slice(res.start_offset, res.end_offset)
-  return uploadChunk(args, ids[0], res.start_offset, chunk)
-    .then(res => uploadChain(buffer, args, res, ids))
+  const response = await uploadChunk(args, ids[0], res.start_offset, chunk)
+  return uploadChain(buffer, args, response, ids)
 }
 
-function facebookApiVideoUpload(args) {
-  return streamToPromise(args.stream)
-    .then(buffer => Promise.all([buffer, apiInit(args, buffer.length)]))
-    .then(([buffer, res]) => uploadChain(buffer, args, res, [res.upload_session_id, res.video_id]))
-    .then(([id, video_id]) => apiFinish(args, id, video_id))
+const facebookApiVideoUpload = async (args) => {
+  const buffer = await streamToPromise(args.stream)
+  const res = await Promise.all([buffer, apiInit(args, buffer.length)])
+  const res2 = await uploadChain(res[0], args, res[1], [
+    res[1].upload_session_id,
+    res[1].video_id
+  ])
+  return apiFinish(args, res2[0], res2[1])
 }
 
 module.exports = facebookApiVideoUpload
