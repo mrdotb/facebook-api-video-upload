@@ -14,7 +14,7 @@ const fbUpload = require('facebook-api-video-upload');
 
 const args = {
   token: "YOURTOKEN", // with the permission to upload
-  id: "YOURID", //The id represent {page_id || user_id || event_id || group_id}
+  id: "YOURID", //The id represent {page_id || group_id}
   stream: fs.createReadStream('./fixture.mp4'), //path to the video,
   title: "my video",
   description: "my description",
@@ -35,7 +35,11 @@ fbUpload(args).then((res) => {
   //res:  { success: true, video_id: '1838312909759132' }
 }).catch((e) => {
   console.error(e);
-});```
+});
+```
+
+## Note
+The Video API allows you to publish Videos on Pages and Groups. Publishing on Users is not supported. [Read more](https://developers.facebook.com/docs/video-api/guides/publishing)
 
 ## License
 MIT © [MrdotB](https://github.com/MRdotB)
